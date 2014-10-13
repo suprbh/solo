@@ -5,10 +5,9 @@
     <title>Drag'n Drop Transcoder</title>
     <link rel="stylesheet" href="styles/styles.css">
     <!-- dependencies -->
-    <script src="bower_components/jquery/jquery.min.js"></script>
-    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="../bower_components/jquery/jquery.min.js"></script>
+    <script src="../bower_components/underscore/underscore-min.js"></script>
     <!-- your scripts -->
-    <script src="scripts/config.js"></script>
     <script src="scripts/app.js"></script>
   </head>
   <body>
@@ -17,9 +16,10 @@
       <div id="status">Drag the files from a folder to a selected area ...</div>
       <div id="drop">Drop files here.</div>
       <p id="message">"Drag a video clip from your local folder to the dashed box for the browser to read the file."</p>
-      <div id="list"></div>
+      <output id="list"></output>
       <script>
         $(function(){
+          app.init();
         });
       </script>
     </div>
