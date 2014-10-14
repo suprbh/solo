@@ -33,16 +33,22 @@ app = {
 
 			var reader = new FileReader();
 			reader.onload = (function(theFile) {
-				// console.log(reader.result);
 				return function(e) {
 					var render = [];
 					// render the image onto the same div box
 					if (f.type.match('image.*')){
             var span = document.createElement('span');
 						span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(theFile.name),'"/>'].join('');
-            // console.log(span);
             document.getElementById('drop').appendChild(span);
-					}
+
+            // app.send(e.target.result);
+
+					} else if (f.type.match('video.*')){
+            var span = document.createElement('span');
+            span.innerHTML = ['<video class="thumb" src="', e.target.result, '" title="', escape(theFile.name),'"controls></video>'].join('');
+            document.getElementById('drop').appendChild(span);
+
+          }
 				}
 			})(f);
 
@@ -56,6 +62,25 @@ app = {
 		evnt.preventDefault();
 
 		evnt.dataTransfer.dropEffect = 'copy';
-	}
+	},
+
+  // send: function(data){
+  
+  //   $.ajax({
+  //     type: 'POST',
+  //     // dataType: 'jsonp',
+  //     crossDomain: true,
+  //     // cache: false,
+  //     url: 'http://127.0.0.1:3000/ffmpeg',
+  //     // accepts: 'application/jsonp',
+  //     data: JSON.stringify({image: data}),
+  //     contentType: 'application/json',
+  //     async: false
+  //   }).done(function(){
+  //     console.log("Sent success");
+  //   }).fail(function(){
+  //     console.log("Error sending POST request");
+  //   })
+  // }
 
 };
