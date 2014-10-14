@@ -1,8 +1,10 @@
 body {
-    background: #eee;
+    /*background: #eee;*/
     text-align: center;
     padding: 0 25px;
     font-family: arial, sans-serif;
+    background-color: #ffffff;
+    color: #333333;
 }
 
 #main {
@@ -79,4 +81,55 @@ form input[type=text] {
 
 #message {
   color: blue;
+}
+
+.sidebar {
+    position: relative;
+    width: 100%;
+}
+
+.col-md-3 {
+    width: 25%;
+    float: left;
+    position: relative;
+    padding-top: 50px;
+}
+
+.col-md-4 {
+    width: 75%;
+    float:left;
+    position: relative;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1170px;
+
+}
+
+div {
+    display: block;
+}
+
+.btn-group {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+
+}
+
+h4 {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: inherit;
+}
+
+.btn {
+    border-color: #bd9d92;
+    color: #333 !important;
+
 }

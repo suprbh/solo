@@ -9,19 +9,119 @@
     <script src="../bower_components/underscore/underscore-min.js"></script>
     <!-- your scripts -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/ffmpeg.js"></script>
+    <!--<script src="scripts/config.js"></script>-->
   </head>
   <body>
-    <div id="main">
-      <h3 align=center>Drag'n Drop Transcoder</h3>
-      <div id="status">Drag and drop the files from a folder to the below selected area ...</div>
-      <div id="drop"></div>
-      <p id="message">"Drag a video clip from your local folder to the dashed box for the browser to read the file."</p>
-      <output id="list"></output>
-      <script>
-        $(function(){
-          app.init();
-        });
-      </script>
+    <div class="container">
+      <div class="col-md-3 sidebar" id="form-input">
+        <div class="overlay"></div>
+        <h4>Formats</h4>
+        <div class="btn-group format-buttons" data-toggle="buttons">
+          <label class="btn primary active">
+            <input data-format="gif" type="radio" data-wasChecked="true" checked>
+            "gif"
+          </label>
+          <label class="btn primary active">
+            <input data-format="mov" type="radio">
+            "mov"
+          </label>
+          <label class="btn primary active">
+            <input data-format="mp4" type="radio">
+            "mp4"
+          </label>
+          <label class="btn primary active">
+            <input data-format="mpeg" type="radio">
+            "mpeg"
+          </label>
+          <h4>Filters</h4>
+          <div class="btn-group btn-group-vertical" data-toggle="buttons">
+            <label class="btn btn-primary">
+              <input data-filter="false" type="checkbox">
+              "None"
+            </label>
+            <label class="btn btn-primary">
+              <input data-filter="unsharp=7:7:-2:7:7:-2" type="checkbox">
+              "Blur"
+            </label>
+             <label class="btn btn-primary">
+              <input data-filter="unsharp=luma_msize_x=7:luma_msize_y=7:luma_amount=2.5" type="checkbox">
+              "Sharpen"
+            </label>
+          </div>
+          <h4>Scale</h4>
+          <form id="dimensions">
+            Width: <input type="text" name="width" id="width">
+            Height:<input type="text" name="height" id="height"><br>
+            <input type="submit" name="submit" class="submit"/>
+          </form>
+
+          <button class="convert">Convert</button>
+        </div>
+      </div>
+      <div id="main" class="col-md-4">
+        <h3 align=center>Drag'n Drop Transcoder</h3>
+        <div id="status">Drag and drop the files from a folder to the below selected area ...</div>
+        <div id="drop"></div>
+        <p id="message">"Drag a video clip from your local folder to the dashed box for the browser to read the file."</p>
+        <output id="list"></output>
+        <script>
+
+          $(function(){
+
+            // Format
+            $('input[type="radio"]').click(function(){
+              var $radio = $(this);
+
+              // if this was previously checked
+              if ($radio.data('waschecked') == true)
+              {
+                $radio.prop('checked', false);
+                $radio.data('waschecked', false);
+              }
+              else {
+                $radio.data('waschecked', true);
+                app.format = $radio.data('format');
+                console.log(app.format);
+              }
+
+              // remove was checked from other radios
+              $radio.siblings('input[type="radio"]').data('waschecked', false);
+            });
+
+            // Filter
+            $('input[type="checkbox"]').click(function(){
+              var $check = $(this);
+
+              // if this was previously checked
+              if ($check.data('waschecked') == true)
+              {
+                $check.prop('checked', false);
+                $check.data('waschecked', false);
+              }
+              else {
+                $check.data('waschecked', true);
+                app.filter = $check.data('filter');
+                console.log(app.filter);
+              }
+
+              // remove was checked from other radios
+              $check.siblings('input[type="checkbox"]').data('waschecked', false);
+            });
+
+            $('#dimensions').on('submit', function(){
+              console.log("Here");
+              app.width = $('#width').val();
+              app.height = $('#height').val();
+              console.log("width: height: ", app.width, app.height);
+            });
+
+
+            app.init();
+
+          });
+        </script>
+      </div>
     </div>
   </body>
 </html>
