@@ -110,8 +110,13 @@ app = {
 
             console.log(e.target.result, escape(theFile.name));
             $('.convert').on('click', function(){
-              if (app.ffmpeg_convert(e.target.result, theFile.name)){
-                console.log("Conversion successful");
+              var res = app.ffmpeg_convert(e.target.result, theFile.name);
+              if (!!res){
+                console.log("Conversion successful", res);
+                var span = document.createElement('span');
+                span.innerHTML = '<a download="output.avi" href="'+res+'">Click here to download output.avi!</a>';
+                console.log("span: ", span);
+                $('.col-md-4 #list').append(span);
               } else {
                 console.log("Conversion Failed");
               }
@@ -149,9 +154,9 @@ app = {
           }
         ]
     });
-    var dataURI = app.base64ArrayBuffer(results); //fixme
+
     alert("File Conversion Successful!");
-    return results;
+    return app.getDownloadLink(results[0].data, results[0].name);;
   },
 
   dataURItoArrayBuffer: function (dataURI) {
@@ -171,97 +176,18 @@ app = {
     return ia;
   },
 
-  base64ArrayBuffer: function(arrayBuffer) {
-  var base64    = ''
-  var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
- 
-  var bytes         = new Uint8Array(arrayBuffer)
-  var byteLength    = bytes.byteLength
-  var byteRemainder = byteLength % 3
-  var mainLength    = byteLength - byteRemainder
- 
-  var a, b, c, d;
-  var chunk;
- 
-  // Main loop deals with bytes in chunks of 3
-  for (var i = 0; i < mainLength; i = i + 3) {
-    // Combine the three bytes into a single integer
-    chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
- 
-    // Use bitmasks to extract 6-bit segments from the triplet
-    a = (chunk & 16515072) >> 18 ;// 16515072 = (2^6 - 1) << 18
-    b = (chunk & 258048)   >> 12 ;// 258048   = (2^6 - 1) << 12
-    c = (chunk & 4032)     >>  6 ;// 4032     = (2^6 - 1) << 6
-    d = chunk & 63  ;             // 63       = 2^6 - 1
- 
-    // Convert the raw binary segments to the appropriate ASCII encoding
-    base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
-  }
- 
-  // Deal with the remaining bytes and padding
-  if (byteRemainder == 1) {
-    chunk = bytes[mainLength];
- 
-    a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
- 
-    // Set the 4 least significant bits to zero
-    b = (chunk & 3)   << 4; // 3   = 2^2 - 1
- 
-    base64 += encodings[a] + encodings[b] + '==' ;
-  } else if (byteRemainder == 2) {
-    chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
- 
-    a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
-    b = (chunk & 1008)  >>  4; // 1008  = (2^6 - 1) << 4
- 
-    // Set the 2 least significant bits to zero
-    c = (chunk & 15)    <<  2 ;// 15    = 2^4 - 1
- 
-    base64 += encodings[a] + encodings[b] + encodings[c] + '=';
-  }
-  
-  return base64;
-},
-
-/* Array of bytes to base64 string decoding */
-
-b64ToUint6: function (nChr) {
-
-  return nChr > 64 && nChr < 91 ?
-      nChr - 65
-    : nChr > 96 && nChr < 123 ?
-      nChr - 71
-    : nChr > 47 && nChr < 58 ?
-      nChr + 4
-    : nChr === 43 ?
-      62
-    : nChr === 47 ?
-      63
-    :
-      0;
-
-},
-
-base64DecToArr: function (sBase64, nBlocksSize) {
-
-  var
-    sB64Enc = sBase64.replace(/[^A-Za-z0-9\+\/]/g, ""), nInLen = sB64Enc.length,
-    nOutLen = nBlocksSize ? Math.ceil((nInLen * 3 + 1 >> 2) / nBlocksSize) * nBlocksSize : nInLen * 3 + 1 >> 2, taBytes = new Uint8Array(nOutLen);
-
-  for (var nMod3, nMod4, nUint24 = 0, nOutIdx = 0, nInIdx = 0; nInIdx < nInLen; nInIdx++) {
-    nMod4 = nInIdx & 3;
-    nUint24 |= b64ToUint6(sB64Enc.charCodeAt(nInIdx)) << 18 - 6 * nMod4;
-    if (nMod4 === 3 || nInLen - nInIdx === 1) {
-      for (nMod3 = 0; nMod3 < 3 && nOutIdx < nOutLen; nMod3++, nOutIdx++) {
-        taBytes[nOutIdx] = nUint24 >>> (16 >>> nMod3 & 24) & 255;
-      }
-      nUint24 = 0;
-
-    }
-  }
-
-  return taBytes;
+getDownloadLink: function (fileData, fileName) {
+  var a = document.createElement('a');
+  a.download = fileName;
+  var blob = new Blob([fileData]);
+  var src = window.URL.createObjectURL(blob);
+  a.href = src;
+  a.textContent = 'Click here to download ' + fileName + "!";
+  return a;
 }
+
+// var result = ffmpeg_run(module);
+
   // send: function(data){
   
   //   $.ajax({
