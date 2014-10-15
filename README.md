@@ -22,7 +22,6 @@ Oh, and I also like to write press-releases in what I call "Oprah-speak" for mai
   > Anyone who would like to modify their local video content to a different format for either viewing on a different device or for embedding in an application, will find this useful.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
   > This product is a easy to use GUI-browser based video transcoder for files located on your local device.
 
 ## Problem ##
@@ -40,7 +39,6 @@ Oh, and I also like to write press-releases in what I call "Oprah-speak" for mai
   > Edit as per your requirements with the various options available on the menu.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
   > "This was the most easy to use product for my video transcoding needs by just dragging and dropping my files to the browser and transcoding them. Saves a lot of hassel of having a GUI for video transcoder installed."
 
 ## Closing and Call to Action ##
