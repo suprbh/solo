@@ -1,7 +1,7 @@
 app = {
 
   resolution: '176x144',
-  // height: 144,
+  framerate: '15',
   format: 'mp4',
   sharpen: false,
   blur: false,
@@ -64,9 +64,16 @@ app = {
       $check.siblings('input[type="checkbox"]').data('waschecked', false);
     });
 
+    // Resolution
     $('.submit').on('click', function(){
       app.resolution = $('#resolution').val();
       console.log("width: height: ", app.resolution);
+    });
+
+    // Framerate
+    $('.submitFR').on('click', function(){
+      app.framerate = $('#framerate').val();
+      console.log("framerate: ", app.framerate);
     });
 
 
@@ -114,7 +121,7 @@ app = {
               if (!!res){
                 console.log("Conversion successful", res);
                 var span = document.createElement('span');
-                span.innerHTML = '<a download="output.avi" href="'+res+'">Click here to download output.avi!</a>';
+                span.innerHTML = '<a download="output.'+ app.format+'" href="'+res+'">Click here to download output.'+ app.format+'!</a>';
                 console.log("span: ", span);
                 $('.col-md-4 #list').append(span);
               } else {
@@ -142,15 +149,15 @@ app = {
 
     console.log("starting video conversion");
     var path = prompt("Give the full path to destination directory") || "~/";
-    var args = "-i " + fileName + " -f " + app.format + " output.avi";
+    var args = "-i " + fileName + " -f " + app.format + " -s " + 
+                app.resolution + " -r " + app.framerate + " output." + app.format;
     console.log("format: app: ", args);
     var results = ffmpeg_run({
         arguments: args.split(" "),
         files: [
           {
-              'data': byteArray,
+              'data': byteArray, //Uint8Array(buffer)
               'name': fileName
-              // data: new Uint8Array(buffer),
           }
         ]
     });
